@@ -13,17 +13,18 @@ const renderMovie = (filter = '') => {
     }
     movieList.innerHTML ='';
 
-    
+    // this filter movie base on the input search of the user 
     const filteredMovie = !filter ? movies : movies.filter(movie => movie.info.title.includes(filter));
     console.log(filteredMovie);
 
     filteredMovie.forEach((movie) => {
         const movieEl = document.createElement('li');
         // movieEl.textContent = movie.info.title;
-        let text = movie.info.title + '-';
-        for(const key in movie.info){
+        const {info, ...otherProps} = movie;
+        let text = movie.getFormatedTitle() + '-';
+        for(const key in info){
             if(key !== 'title'){
-                text = text + `${key}: ${movie.info[key]}`
+                text = text + `${key}: ${info[key]}`
             }
         } 
 
@@ -49,7 +50,10 @@ const addMovieHandler = () => {
             title,
             [extraName]: extraValue
         },
-        id: Math.random()
+        id: Math.random.toString(),
+        getFormatedTitle(){
+            return this.info.title.toUpperCase()
+        }
     };
 
     movies.push(newMovie);
@@ -57,6 +61,7 @@ const addMovieHandler = () => {
     // console.log(movies);
 };
 
+//This search for the specif movie base on the title search 
 const searchMovieHandler = ()=>{
     const filterTerm = document.getElementById('filter-title').value
     renderMovie(filterTerm);
